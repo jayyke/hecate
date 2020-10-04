@@ -35,7 +35,7 @@ class Hunting(commands.Cog):
             "alien": ":alien: **_MeepMorp~_**",
             "demon": ":japanese_ogre: **_heavy breathing_**",
             "vampire": ":vampire: **_Bleh!_**",
-            "willtolive": ":skull: **_I'm nonexistant!_**",
+            "will to live": ":skull: **_I'm nonexistant!_**",
         }
         self.in_game = []
         self.paused_games = []
