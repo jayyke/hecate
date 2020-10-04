@@ -190,7 +190,7 @@ class Hunting(commands.Cog):
                 kill_list.append(f"{animal[1]} {animal[0].capitalize()}")
             else:
                 kill_list.append(f"{animal[1]} {animal[0].capitalize()}s")
-            message = f"{member.name} shot a total of {total} animals ({humanize_list(kill_list)})"
+            message = f"{member.name} caught a total of {total} animals ({humanize_list(kill_list)})"
         await ctx.send(bold(message))
 
     @checks.mod_or_permissions(manage_guild=True)
