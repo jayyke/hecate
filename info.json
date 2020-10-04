@@ -1,0 +1,7 @@
+{
+    "author" : ["jayyke (jake#8429)"],
+    "install_msg" : "Thanks for installing",
+    "name" : "jayyke-cogs",
+    "short" : "Utility and fun cogs",
+    "description" : "Cogs requested by others, personal cogs, or orphaned cogs."
+}
