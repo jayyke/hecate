@@ -30,8 +30,12 @@ class Hunting(commands.Cog):
         self.animals = {
             "ghost": ":ghost: **_OOooOoooOo?!_**",
             "zombie": ":zombie: **_Brrrainnns!_**",
-            "mage": ":mage: **_What Babe?_**",
-            "candy": ":candy: **_Spicy!!!_**",
+            "mage": ":mage: **_You remind me of the babe!_**",
+            "candy": ":candy: **_Spicy uwu!!!_**",
+            "alien": ":alien: **_MeepMorp~_**",
+            "demon": ":japanese_ogre: **_heavy breathing_**",
+            "vampire": ":vampire: **_Bleh!_**",
+            "willtolive": ":skull: **_I'm nonexistant!_**",
         }
         self.in_game = []
         self.paused_games = []
@@ -53,7 +57,7 @@ class Hunting(commands.Cog):
     @commands.guild_only()
     @commands.group()
     async def hunting(self, ctx):
-        """Hunting, it hunts birds and things that fly."""
+        """Catch things"""
         if ctx.invoked_subcommand is None:
             guild_data = await self.config.guild(ctx.guild).all()
             if not guild_data["channels"]:
@@ -178,7 +182,7 @@ class Hunting(commands.Cog):
         total = 0
         kill_list = []
         if not score:
-            message = "Please shoot something before you can brag about it."
+            message = "Please capture something before you can brag about it."
 
         for animal in score.items():
             total = total + animal[1]
@@ -350,9 +354,9 @@ class Hunting(commands.Cog):
 
         if random.randrange(0, 17) > 1:
             await self._add_score(guild, author, animal)
-            msg = f"{author.display_name} shot a {animal}{bangtime}!"
+            msg = f"{author.display_name} caught the {animal}{bangtime}!"
         else:
-            msg = f"{author.display_name} missed the shot and the {animal} got away!"
+            msg = f"{author.display_name} failed to capture the {animal} and it got away!"
 
         self.in_game.remove(channel.id)
         await channel.send(bold(msg))
