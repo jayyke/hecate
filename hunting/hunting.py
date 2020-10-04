@@ -28,10 +28,11 @@ class Hunting(commands.Cog):
         self.config = Config.get_conf(self, 2784481002, force_registration=True)
 
         self.animals = {
-            "dove": ":dove: **_Coo!_**",
-            "penguin": ":penguin: **_Noot!_**",
-            "chicken": ":chicken: **_Bah-gawk!_**",
-            "duck": ":duck: **_Quack!_**",
+            "ghost": ":ghost: **_OOooOoooOo?!_**",
+            "zombie": ":zombie: **_Brrrainnns!_**",
+            "mage": ":mage: **_What Babe?_**",
+            "candy": ":candy: **_Spicy!!!_**",
+            "soap": ":soap: **_Wash ya hands!_**",
         }
         self.in_game = []
         self.paused_games = []
@@ -85,7 +86,7 @@ class Hunting(commands.Cog):
         """
         userinfo = await self.config._all_from_scope(scope="USER")
         if not userinfo:
-            return await ctx.send(bold("Please shoot something before you can brag about it."))
+            return await ctx.send(bold("Please catch something before you can brag about it."))
 
         async with ctx.typing():
             sorted_acc = sorted(userinfo.items(), key=lambda x: (x[1]["total"]), reverse=True)[:50]
@@ -96,7 +97,7 @@ class Hunting(commands.Cog):
         pound_len = len(str(len(sorted_acc)))
         score_len = 10
         header = "{score:{score_len}}{name:2}\n".format(
-            score="# Birds Shot",
+            score="# Things Captured",
             score_len=score_len + 5,
             name="Name" if not str(ctx.author.mobile_status) in ["online", "idle", "dnd"] else "Name",
         )
