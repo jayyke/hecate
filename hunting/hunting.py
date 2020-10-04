@@ -32,7 +32,6 @@ class Hunting(commands.Cog):
             "zombie": ":zombie: **_Brrrainnns!_**",
             "mage": ":mage: **_What Babe?_**",
             "candy": ":candy: **_Spicy!!!_**",
-            "soap": ":soap: **_Wash ya hands!_**",
         }
         self.in_game = []
         self.paused_games = []
