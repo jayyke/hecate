@@ -28,14 +28,14 @@ class Hunting(commands.Cog):
         self.config = Config.get_conf(self, 2784481002, force_registration=True)
 
         self.animals = {
-            "ghost": ":ghost: **_OOooOoooOo?!_**",
-            "zombie": ":zombie: **_Brrrainnns!_**",
-            "mage": ":mage: **_You remind me of the babe!_**",
-            "candy": ":candy: **_Spicy uwu!!!_**",
-            "alien": ":alien: **_MeepMorp~_**",
-            "demon": ":japanese_ogre: **_heavy breathing_**",
-            "vampire": ":vampire: **_Bleh!_**",
-            "will to live": ":skull: **_I'm nonexistant!_**",
+            "bird": ":bird: **_Tweet!_**",
+            "rabbit": ":rabbit: **_Hop!_**",
+            "butterfly": ":butterfly: **_Flap Flap!_**",
+            "bee": ":bee: **_Buzz!_**",
+            "duck": ":duck: **_Quack!_**",
+            "trex": ":t_rex: **_Rawr!! XD_**",
+            "gorilla": ":gorilla: **_Stinky!_**",
+            "parrot": ":parrot: **_Cracker?_**",
         }
         self.in_game = []
         self.paused_games = []
@@ -47,7 +47,7 @@ class Hunting(commands.Cog):
             "hunt_interval_maximum": 3600,
             "wait_for_bang_timeout": 20,
             "channels": [],
-            "bang_time": False,
+            "bang_time": True,
             "bang_words": True,
         }
         default_user = {"score": {}, "total": 0}
