@@ -180,7 +180,7 @@ class Hunting(commands.Cog):
         total = 0
         kill_list = []
         if not score:
-            message = "Please shoot something before you can brag about it."
+            message = "Please catch something before you can brag about it."
 
         for animal in score.items():
             total = total + animal[1]
@@ -375,7 +375,7 @@ class Hunting(commands.Cog):
 
         if random.randrange(0, 17) > 1:
             await self._add_score(guild, author, animal)
-            msg = f"{author.display_name} shot a {animal}{bangtime}!"
+            msg = f"{author.display_name} caught a {animal}{bangtime}!"
         else:
             msg = f"{author.display_name} missed the capture and the {animal} got away!"
 
