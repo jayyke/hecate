@@ -1,18 +1,19 @@
-from typing import Literal
-
 import asyncio
-import discord
 import datetime
+from logging import warning
 import math
 import random
 import time
+from typing import Literal
 
-from redbot.core import checks, commands, Config
-from redbot.core.utils.chat_formatting import bold, box, humanize_list, humanize_number, pagify
-from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
+import discord
+from redbot.core import Config, checks, commands
+from redbot.core.utils.chat_formatting import (bold, box, humanize_list,
+                                               humanize_number, pagify)
+from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
+from redbot.core.utils.predicates import MessagePredicate
 
-
-__version__ = "3.1.4"
+__version__ = "3.1.6"
 
 
 class Hunting(commands.Cog):
@@ -28,14 +29,10 @@ class Hunting(commands.Cog):
         self.config = Config.get_conf(self, 2784481002, force_registration=True)
 
         self.animals = {
-            "bird": ":bird: **_Tweet!_**",
-            "rabbit": ":rabbit: **_Hop!_**",
-            "butterfly": ":butterfly: **_Flap Flap!_**",
-            "bee": ":bee: **_Buzz!_**",
+            "dove": ":dove: **_Coo!_**",
+            "penguin": ":penguin: **_Noot!_**",
+            "chicken": ":chicken: **_Bah-gawk!_**",
             "duck": ":duck: **_Quack!_**",
-            "trex": ":t_rex: **_Rawr!! XD_**",
-            "gorilla": ":gorilla: **_Stinky!_**",
-            "parrot": ":parrot: **_Cracker?_**",
         }
         self.in_game = []
         self.paused_games = []
@@ -47,7 +44,7 @@ class Hunting(commands.Cog):
             "hunt_interval_maximum": 3600,
             "wait_for_bang_timeout": 20,
             "channels": [],
-            "bang_time": True,
+            "bang_time": False,
             "bang_words": True,
         }
         default_user = {"score": {}, "total": 0}
@@ -57,7 +54,7 @@ class Hunting(commands.Cog):
     @commands.guild_only()
     @commands.group()
     async def hunting(self, ctx):
-        """Catch things"""
+        """Hunting, it hunts birds and things that fly."""
         if ctx.invoked_subcommand is None:
             guild_data = await self.config.guild(ctx.guild).all()
             if not guild_data["channels"]:
@@ -66,7 +63,8 @@ class Hunting(commands.Cog):
                 channel_names = []
                 for channel_id in guild_data["channels"]:
                     channel_obj = self.bot.get_channel(channel_id)
-                    channel_names.append(channel_obj.name)
+                    if channel_obj:
+                        channel_names.append(channel_obj.name)
 
             hunting_mode = "Words" if guild_data["bang_words"] else "Reactions"
             reaction_time = "On" if guild_data["bang_time"] else "Off"
@@ -100,7 +98,7 @@ class Hunting(commands.Cog):
         pound_len = len(str(len(sorted_acc)))
         score_len = 10
         header = "{score:{score_len}}{name:2}\n".format(
-            score="# Things Captured",
+            score="# Birds Shot",
             score_len=score_len + 5,
             name="Name" if not str(ctx.author.mobile_status) in ["online", "idle", "dnd"] else "Name",
         )
@@ -182,7 +180,7 @@ class Hunting(commands.Cog):
         total = 0
         kill_list = []
         if not score:
-            message = "Please capture something before you can brag about it."
+            message = "Please shoot something before you can brag about it."
 
         for animal in score.items():
             total = total + animal[1]
@@ -190,7 +188,7 @@ class Hunting(commands.Cog):
                 kill_list.append(f"{animal[1]} {animal[0].capitalize()}")
             else:
                 kill_list.append(f"{animal[1]} {animal[0].capitalize()}s")
-            message = f"{member.name} caught a total of {total} animals ({humanize_list(kill_list)})"
+            message = f"{member.name} has caught a total of {total} animals ({humanize_list(kill_list)})"
         await ctx.send(bold(message))
 
     @checks.mod_or_permissions(manage_guild=True)
@@ -230,12 +228,35 @@ class Hunting(commands.Cog):
 
         await ctx.send(bold(message))
 
+    @checks.is_owner()
+    @hunting.command()
+    async def clearleaderboard(self, ctx):
+        """
+        Clear all the scores from the leaderboard.
+        """
+        warning_string = (
+            "Are you sure you want to clear all the scores from the leaderboard?\n"
+            "This is a global wipe and **cannot** be undone!\n"
+            "Type \"Yes\" to confirm, or \"No\" to cancel."
+        )
+
+        await ctx.send(warning_string)
+        pred = MessagePredicate.yes_or_no(ctx)
+        try:
+            await self.bot.wait_for("message", check=pred, timeout=15)
+            if pred.result is True:
+                await self.config.clear_all_users()
+                return await ctx.send("Done!")
+            else:
+                return await ctx.send("Alright, not clearing the leaderboard.")
+        except asyncio.TimeoutError:
+            return await ctx.send("Response timed out.")
+
     @checks.mod_or_permissions(manage_guild=True)
     @hunting.command()
     async def timing(self, ctx, interval_min: int, interval_max: int, bang_timeout: int):
         """
         Change the hunting timing.
-        
         `interval_min` = Minimum time in seconds for a new bird. (120s min)
         `interval_max` = Maximum time in seconds for a new bird. (240s min)
         `bang_timeout` = Time in seconds for users to shoot a bird before it flies away. (10s min)
@@ -354,9 +375,9 @@ class Hunting(commands.Cog):
 
         if random.randrange(0, 17) > 1:
             await self._add_score(guild, author, animal)
-            msg = f"{author.display_name} caught the {animal}{bangtime}!"
+            msg = f"{author.display_name} shot a {animal}{bangtime}!"
         else:
-            msg = f"{author.display_name} failed to capture the {animal} and it got away!"
+            msg = f"{author.display_name} missed the capture and the {animal} got away!"
 
         self.in_game.remove(channel.id)
         await channel.send(bold(msg))
