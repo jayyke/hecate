@@ -98,7 +98,7 @@ class Hunting(commands.Cog):
         pound_len = len(str(len(sorted_acc)))
         score_len = 10
         header = "{score:{score_len}}{name:2}\n".format(
-            score="# Birds Shot",
+            score="# Creatures Captured",
             score_len=score_len + 5,
             name="Name" if not str(ctx.author.mobile_status) in ["online", "idle", "dnd"] else "Name",
         )
